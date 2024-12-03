@@ -4,16 +4,16 @@
 
 /* Custom global styles */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f0f4f8; /* Greyish blue */
+  --foreground: #171717; /* Default text color */
   --primary-color: #4CAF50; /* Green for buttons */
   --secondary-color: #007BFF; /* Blue for links and buttons */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1a1a1a;
-    --foreground: #f5f5f5;
+    --background: #1a1a1a; /* Dark mode background */
+    --foreground: #f5f5f5; /* Text color for dark mode */
     --primary-color: #2D8C1F; /* Darker green for dark mode */
     --secondary-color: #4D9FE6; /* Light blue for dark mode */
   }
@@ -21,7 +21,7 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: var(--background); /* Applies greyish blue as default */
   font-family: 'Inter', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
