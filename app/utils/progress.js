@@ -23,8 +23,10 @@ export const checkProgress = (requiredStep) => {
   // If the user hasn't completed the previous step, redirect them
   if (currentStep < requiredStep) {
     const redirectPath = getNextPage(currentStep);
-    window.location.href = redirectPath;
+    // Using Next.js router for client-side navigation
+    return redirectPath;
   }
+  return null; // Return null if no redirect is necessary
 };
 
 export const updateProgress = (nextStep) => {

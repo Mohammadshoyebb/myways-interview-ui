@@ -27,7 +27,7 @@ export default function Question() {
 
   // Start camera and microphone preview
   useEffect(() => {
-    const videoElement = document.getElementById("camera-preview");
+    const videoElement = videoRef.current;
 
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true }) // Request camera and microphone access
@@ -95,16 +95,12 @@ export default function Question() {
               <div className="text-red-500 text-center">{cameraError}</div> // Display error if camera access fails
             ) : (
               <video
-                id="camera-preview"
                 ref={videoRef}
                 className="w-full h-full object-cover rounded-lg"
                 autoPlay
                 muted
                 playsInline
-              >
-                <source src="" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              />
             )}
           </div>
 
