@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useRef } from "react";
@@ -26,30 +25,12 @@ export default function Question() {
       });
   }, []);
 
-  // Start recording and enable mic
-  async function startRecording() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    videoRef.current.srcObject = stream;
-    videoRef.current.play();
-    setTimer(60); // Reset the timer for next question
-  }
-
+  // Start camera and microphone preview
   useEffect(() => {
-    // Decrease the timer every second
-    const interval = setInterval(() => {
-      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-
-    // Cleanup interval on unmount
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    // Camera preview logic
     const videoElement = document.getElementById("camera-preview");
 
     navigator.mediaDevices
-      .getUserMedia({ video: true }) // Request camera access
+      .getUserMedia({ video: true, audio: true }) // Request camera and microphone access
       .then((stream) => {
         videoElement.srcObject = stream; // Display camera stream
         videoElement.play(); // Start playing the stream
@@ -68,10 +49,27 @@ export default function Question() {
     };
   }, []);
 
+  // Timer countdown and redirect when it reaches 0
+  useEffect(() => {
+    if (timer === 0) {
+      redirectToLoader();
+    }
+
+    const interval = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [timer]);
+
+  // Redirect to Loader page
+  const redirectToLoader = () => {
+    window.location.href = "/loader";
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
       <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-2xl space-y-6">
-
         {/* Question Number */}
         <div className="text-gray-700 text-lg font-semibold text-center">
           Question {questionNumber}/{totalQuestions}
@@ -82,7 +80,7 @@ export default function Question() {
 
         {/* Timer */}
         <div className="text-gray-600 text-lg font-medium text-center">
-          Timer : <span className="text-red-600 font-bold">{timer}s</span>
+          Timer: <span className="text-red-600 font-bold">{timer}s</span>
         </div>
 
         {/* Microphone Permission Error */}
@@ -125,11 +123,11 @@ export default function Question() {
           <button
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             onClick={() => {
-              // Logic to save and go to the next question
               if (questionNumber < totalQuestions) {
                 setQuestionNumber(questionNumber + 1); // Increment question number
                 setTimer(60); // Reset timer for next question
               }
+              redirectToLoader(); // Redirect to Loader page
             }}
           >
             Save & Next

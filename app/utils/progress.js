@@ -1,31 +1,32 @@
-// app/utils/progress.js
+// utils/progress.js
 
-// Redirects users to the correct step if they access a page out of order.
+export const getNextPage = (step) => {
+  switch (step) {
+    case 1:
+      return '/instruction';
+    case 2:
+      return '/answer';
+    case 3:
+      return '/loader';
+    case 4:
+      return '/question';
+    case 5:
+      return '/completion';
+    default:
+      return '/permission'; // Default to permissions if no step matches
+  }
+};
+
 export const checkProgress = (requiredStep) => {
-    const currentStep = parseInt(sessionStorage.getItem('currentStep') || '1', 10);
-  
-    // If the user's current step is less than the required step, redirect them
-    if (currentStep < requiredStep) {
-      const redirectPath = getRedirectPath(currentStep);
-      window.location.href = redirectPath;
-    }
-  };
-  
-  // Updates the current step in sessionStorage when the user completes a step.
-  export const updateProgress = (nextStep) => {
-    sessionStorage.setItem('currentStep', nextStep);
-  };
-  
-  // Maps steps to their corresponding page paths.
-  export const getRedirectPath = (step) => {
-    switch (step) {
-      case 1: return '/permission';
-      case 2: return '/instruction';
-      case 3: return '/answer';
-      case 4: return '/loader';
-      case 5: return '/question';
-      case 6: return '/completion';
-      default: return '/permission'; // Default to the first step
-    }
-  };
-  
+  const currentStep = parseInt(sessionStorage.getItem('currentStep') || '1', 10);
+
+  // If the user hasn't completed the previous step, redirect them
+  if (currentStep < requiredStep) {
+    const redirectPath = getNextPage(currentStep);
+    window.location.href = redirectPath;
+  }
+};
+
+export const updateProgress = (nextStep) => {
+  sessionStorage.setItem('currentStep', nextStep);
+};
